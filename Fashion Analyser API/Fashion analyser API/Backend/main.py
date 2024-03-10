@@ -1,3 +1,5 @@
+import os
+
 import classification.blue_colour as blue_colour
 import classification.cyan_colour as cyan_colour
 import classification.green_colour as green_colour
@@ -83,6 +85,9 @@ async def release_resources(background_tasks: BackgroundTasks):
 
 
 def load_model():
+    # Set TFHUB_CACHE_DIR to a writable directory
+    os.environ["TFHUB_CACHE_DIR"] = "/path/to/cache/directory"
+
     model_url = "https://tfhub.dev/google/tf2-preview/mobilenet_v2/classification/4"
     model = tf.keras.Sequential([
         hub.KerasLayer(model_url, input_shape=(224, 224, 3))
@@ -109,6 +114,7 @@ def detect_fabric_quality(model, frame):
 
 
 def analyze_fabric_quality():
+    global cap  # Mark cap as global
     # Load pre-trained MobileNetV2 model
     fabric_quality_model = load_model()
 
